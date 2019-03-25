@@ -1,9 +1,9 @@
 #include <iostream>
-#include <stdlib.h> //import for rand function
-#include <time.h>   //import for time function in srand
-#include <vector>   // using a vector data structure
-#include <math.h>   //used for POW function
-#include <time.h>   //used to generate random seed each run time (TIME)
+#include <stdlib.h> 
+#include <time.h>  
+#include <vector>   
+#include <math.h>   
+#include <time.h>   
 using namespace std;
 
 const int e = 2.71828182845;//used for simulated Annealing
@@ -30,9 +30,9 @@ int checkAttack(int *game, int gameSize)
     int h = 0; //score heuristic
     for (int i=0;i<gameSize-1;i++)
     {
-        for (int j=i+1;j<gameSize;j++) //make sure j is always above i (j=i+1)
+        for (int j=i+1;j<gameSize;j++) 
         {
-            int row_i = game[i]; // put in variables so that they can be called multiple times easier
+            int row_i = game[i]; 
             int row_j = game[j];
 
             if (row_i == row_j || // check vertical attacks
@@ -74,7 +74,7 @@ void geneticSearch(int *game, int gameSize){
     //WARNING - the size of weightDist needs to be larger to accommodate larger board sizes and is extremely inefficient for this problem, but it works
     int weightDistLength = 0; //int for the weightDistribute length
     int exitCode = 0;
-    int pop[gameSize][gameSize]; //2d array, first parameter=population, second parameter=gameSize
+    int pop[gameSize][gameSize]; 
     int child[gameSize][gameSize]; //both parameters are set to gameSize for simplification
     const int optimalWeight = 28;
 
@@ -93,14 +93,14 @@ void geneticSearch(int *game, int gameSize){
             if(optimalWeight == checkWeight(pop[i], gameSize)) //if the population weight is perfect (no attacking queens) then we found a solution
             {
                 print(pop[i], gameSize); //print the solution
-                exitCode = 1; //exit the while loop
+                exitCode = 1; //exit
             }
         }
         //probability
         for(int n=0;n<gameSize;n++)
         {
             int weight = checkWeight(pop[n], gameSize); //get the weight value of population and assign to weight variable
-            for(int k=0;k<weight;k++) //iterate through 'weight' amount of times, this can be completely different each runtime
+            for(int k=0;k<weight;k++) 
             {
                 weightDistribute[weightDistLength] = n; //filling weightDist with member number
                 weightDistLength++;
@@ -112,8 +112,8 @@ void geneticSearch(int *game, int gameSize){
         {
             int parent1 = weightDistribute[rand() % weightDistLength]; //each parent gets a randomised 0-weightDistLength
             int parent2 = weightDistribute[rand() % weightDistLength];
-            int r = rand() % gameSize; //generate a random number between 0-gameSize
-            for(int k=0;k<r;k++)  //begin crossover, iteration count is never known as it uses crossover probability
+            int r = rand() % gameSize; 
+            for(int k=0;k<r;k++)  
             {
                 child[i][k] = pop[parent1][k]; //assign child both parents
                 child[i+1][k] = pop[parent2][k];
@@ -143,23 +143,23 @@ void geneticSearch(int *game, int gameSize){
                 pop[i][j] = child[i][j]; //assigning population equal to child
             }
         }
-        weightDistLength = 0; //reset back to 0 for next while loop iteration
+        weightDistLength = 0; //reset 
     }
 }
 
 void simulatedAnnealing(int *game, int gameSize){
 
-    int t = 100; //higher temperate = higher probability of replacing current solution with a worse one
+    int t = 100; //higher temperature means higher probability of replacing current solution with a worse one
     int decayRate = 0.90; //anneal rate
     int energyDiff; //delta e
     int tempGame[gameSize];
-    int ran = (rand()%1000)/1000; //generate random integer between 0-999 and divide it by 1000
+    int ran = (rand()%1000)/1000; 
     for(int k = 0; k < 200000; k++) //if no solution is found within these iterations then produce nothing
         {
         t = t * decayRate; //decreases t each iteration
         for(int i=0; i<gameSize; i++)
         {
-        tempGame[i] = game[i]; //give tempGame Game's contents
+        tempGame[i] = game[i]; 
         tempGame[rand()%gameSize] = rand()%gameSize; //pick a random move
         energyDiff = checkAttack(tempGame, gameSize) - checkAttack(game, gameSize); //calculates the difference between the change in boards
         }
@@ -183,7 +183,7 @@ void simulatedAnnealing(int *game, int gameSize){
 int* randomRestarthillClimbing(int *game, int gameSize)
 {
     //contains the best moves
-    vector<int> container; //creating a vector to manipulate with vector functions(clear, push, size)
+    vector<int> container; 
     int newhCost;
     int htoBeat = checkAttack(game, gameSize);
     int *gameOut;
@@ -195,12 +195,12 @@ int* randomRestarthillClimbing(int *game, int gameSize)
     }
     for (int i=0;i<gameSize;i++)
     {
-        container.clear(); //removes all elements from the vector (garbage), which makes the container size 0
+        container.clear(); //remove all garbage from the vector
         container.push_back(gameOut[i]); //add elements of gameOut array to vector
         for (int k=0;k<gameSize;k++)
         {
             gameOut[i] = k; //move the queen to the new row
-            newhCost = checkAttack(gameOut, gameSize); //assigning gameOut
+            newhCost = checkAttack(gameOut, gameSize); 
             if (newhCost == htoBeat) //comparing if gameOut and Game are equal when input into checkAttack function
             {
                 container.push_back(k); //add element k to vector (adds to the end of the vector)
@@ -231,7 +231,7 @@ int* hillClimbing(int *game, int gameSize)
         for (int k=0;k<gameSize;k++)
         {
             gameOut[i] = k; //move the queen to the new row
-            int newhCost = checkAttack(gameOut, gameSize); //assigning gameOut
+            int newhCost = checkAttack(gameOut, gameSize); 
 
             if (newhCost < htoBeat) // return the first better match found
             {
@@ -266,7 +266,7 @@ void randomGameState(int *game, int gameSize)
 {
     for (int i = 0; i < gameSize; i++)
     {
-        game[i] = rand() % gameSize; //uses the rand function to help randomly input queens on each row
+        game[i] = rand() % gameSize; //randomly input queens on each row
     }
 }
 //if stateNext function return NULL then reset current state
@@ -276,7 +276,7 @@ void solve(int gameSize)
     int *game;
     int *hillClimbTemp;
     game = new int[gameSize]; // dynamically allocates space of size gameSize, returns pointer to first element which is assigned to game
-    randomGameState(game, gameSize); //generate random game state (randomly placed queen per row)
+    randomGameState(game, gameSize); //generate random game state
     while (checkAttack(game, gameSize) != 0) //while heuristic does not equal 0, continue looping
     {
         if (!stateNext(game, gameSize)) //if stateNext is false, reset the state
